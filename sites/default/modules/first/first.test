@@ -8,13 +8,6 @@
 class FirstTestCase extends DrupalWebTestCase {
 
   /**
-   * Implements setUp().
-   */
-  public function setUp() {
-    parent::setUp('first');
-  }
-
-  /**
    * Implements getInfo().
    */
   public static function getInfo() {
@@ -23,6 +16,13 @@ class FirstTestCase extends DrupalWebTestCase {
       'description' => 'Test blocks in the First module.',
       'group' => 'First',
     );
+  }
+
+  /**
+   * Implements setUp().
+   */
+  public function setUp() {
+    parent::setUp('first');
   }
 
   /**
