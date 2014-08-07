@@ -1,0 +1,20 @@
+<?php
+
+/**
+ * @file
+ * Tests for the First module.
+ */
+
+class FirstTestCase extends DrupalWebTestCase {
+
+  /**
+   * Implements getInfo().
+   */
+  public function getInfo() {
+    return array(
+      'name' => 'First module block functionality',
+      'description' => 'Test blocks in the First module.',
+      'group' => 'First',
+    );
+  }
+}
