@@ -8,13 +8,30 @@
 class FirstTestCase extends DrupalWebTestCase {
 
   /**
+   * Implements setUp().
+   */
+  public function setUp() {
+    parent::setUp('first');
+  }
+
+  /**
    * Implements getInfo().
    */
-  public function getInfo() {
+  public static function getInfo() {
     return array(
       'name' => 'First module block functionality',
       'description' => 'Test blocks in the First module.',
       'group' => 'First',
     );
+  }
+
+  /**
+   * Implements testBlockInfo().
+   */
+  public function testBlockInfo() {
+    $info = module_invoke('first', 'block_info');
+
+    $this->assertEqual(1, count($info), t('Module defines a block.'));
+    $this->assertTrue(isset($info['list_modules']), t('Module list block does exist.'));
   }
 }
