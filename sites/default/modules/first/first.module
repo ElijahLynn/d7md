@@ -35,10 +35,15 @@ function first_block_info() {
 function first_block_view($block_name) {
   if ($block_name == 'list_modules') {
     $list = module_list();
+    // Randomize the 2nd through 2nd to last characters of each module name.
+    // For a fun readability experiment.
     foreach ($list as $key) {
-      $list[$key] = strrev($key);
+      $first_char = $key[0];
+      $garbled_middle = str_shuffle(mb_strcut($key, 1, -1));
+      $last_char = $key[strlen($key) - 1];
+      $garbled_key = $first_char . $garbled_middle . $last_char;
+      $list[$key] = $garbled_key;
     }
-    asort($list);
     $theme_args = array(
       'items' => $list,
       'type' => 'ol',
