@@ -34,4 +34,14 @@ class FirstTestCase extends DrupalWebTestCase {
     $this->assertEqual(1, count($info), t('Module defines a block.'));
     $this->assertTrue(isset($info['list_modules']), t('Module list block does exist.'));
   }
+
+  /**
+   * Implements testBlockView().
+   */
+  public function testBlockView() {
+    $data = module_invoke('first', 'block_view', 'list_modules');
+
+    $this->assertTrue(is_array($data), 'Block returns renderable data.');
+    $this->assertEqual($data['subject'], t('Enabled modules'), 'Subject is set.');
+  }
 }

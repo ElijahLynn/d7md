@@ -32,7 +32,7 @@ function first_block_info() {
 /**
  * Implements hook_block_view().
  */
-function first_block_view($block_name) {
+function first_block_view($block_name = '') {
   if ($block_name == 'list_modules') {
     $list = module_list();
     // Randomize the 2nd through 2nd to last characters of each module name.
