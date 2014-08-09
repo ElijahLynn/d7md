@@ -1,0 +1,6 @@
+name = Navbar Devel
+description = Add development menu to navbar.
+core = 7.x
+
+dependencies[] = navbar
+dependencies[] = devel

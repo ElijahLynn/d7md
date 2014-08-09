@@ -1,0 +1,34 @@
+<?php
+
+/**
+ * @file
+ * Add development menu to navbar.
+ */
+
+/**
+ * Implements hook_navbar().
+ */
+function navbar_devel_navbar() {
+  $items = array();
+
+  if (user_access('access devel information')) {
+    $items['devel'] = array(
+      '#type' => 'navbar_item',
+      'tab' => array(
+        '#type' => 'link',
+        '#title' => t('Development'),
+        '#href' => 'devel/settings',
+        '#options' => array(
+          'attributes' => array(
+            'class' => array('navbar-tab'),
+          ),
+        ),
+      ),
+      'tray' => array(
+        'development_menu' => menu_tree('devel'),
+      ),
+    );
+  }
+
+  return $items;
+}
