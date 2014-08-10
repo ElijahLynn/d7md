@@ -5,6 +5,9 @@
  * Template functions for Elijah's Stark Subtheme.
  */
 
+/**
+ * Overrides theme_item_list().
+ */
 function estark_item_list($variables) {
   $items = $variables['items'];
   $title = $variables['title'];
