@@ -88,6 +88,10 @@ function single_blog_block_view($delta = '') {
       }
 
       if (!empty($items)) {
+
+        // Add some sizzle.
+        $block['content']['#attached']['css'][] = drupal_get_path('module', 'single_blog') . '/single_blog.css';
+
         // Create render array of blog entries.
         $block['content']['list'] = array(
           '#theme' => 'item_list__single_blog',
@@ -95,6 +99,7 @@ function single_blog_block_view($delta = '') {
           // Prerender because of #891112. Pg. 101
           '#pre_render' => array('single_blog_item_list_child_render'),
         );
+        // Create a more link.
         $block['content']['more'] = array(
           '#theme' => 'more_link',
           '#url' => 'blog',
