@@ -114,6 +114,8 @@ function single_blog_block_view($delta = '') {
 
 /**
  * Callback for single_blog_block_view().
+ *
+ * @see single_blog_block_view()
  */
 function single_blog_item_list_child_render($elements) {
   foreach (array_keys($elements['#items']) as $key) {
