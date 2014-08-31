@@ -125,6 +125,9 @@ function user_warn_confirm_form_submit($form, &$form_state) {
     variable_get('site_mail', NULL),
     TRUE
   );
+
+  drupal_set_message(t('%user has been sent a warning email.', array('%user' => $account->name)));
+  $form_state['redirect'] = 'user/' . $account->uid;
 }
 
 /**
