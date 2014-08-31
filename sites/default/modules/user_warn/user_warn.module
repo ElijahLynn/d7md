@@ -35,7 +35,7 @@ function user_warn_menu() {
     'type' => MENU_NORMAL_ITEM,
   );
 
-  $items['user/%/warn'] = array(
+  $items['user/%user/warn'] = array(
     'title' => 'Warn',
     'description' => 'Send e-mail to a user about improper site behaviour.',
     'page callback' => 'drupal_get_form',
@@ -91,16 +91,16 @@ function user_warn_form($form, &$form_state) {
  *
  * @ingroup forms
  */
-function user_warn_confirm_form($form, &$form_state, $uid) {
+function user_warn_confirm_form($form, &$form_state, $user) {
   $form['account'] = array(
     '#type' => 'value',
-    '#value' => user_load($uid),
+    '#value' => $user,
   );
 
   return confirm_form(
     $form,
     t('Are you sure you want to send a warning e-mail to %user?', array('%user' => $form['account']['#value']->name)),
-    'user/' . $uid,
+    'user/' . $user->uid,
     t('This action can not be undone.'),
     t('Send e-mail'),
     t('Cancel')
