@@ -132,7 +132,7 @@ function user_warn_mail($key, &$message, $params) {
     case 'warn':
       $account = $params['account'];
       $subject = variable_get('user_warn_e-mail_subject', 'Administrative Warning');
-      $body = variable_get('user_warn_e-mail_text', "You've been warned!");
+      $body = variable_get('user_warn_e-mail_text', USER_WARN_MAIL_TEXT);
 
       if (variable_get('user_warn_bcc', FALSE)) {
         $admin_mail = variable_get('site_mail', NULL);
