@@ -45,6 +45,7 @@ function user_warn_form($form, &$form_state) {
   // Text field for the e-mail subject.
   $form['user_warn_e-mail_subject'] = array(
     '#type' => 'textfield',
+    '#default_value' => variable_get('user_warn_e-mail_subject', 'Administrative Warning!'),
     '#title' => t('Warning e-mail subject'),
     '#description' => t('The subject of the e-mail which will be sent to users.'),
     '#size' => 40,
