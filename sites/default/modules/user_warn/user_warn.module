@@ -1,0 +1,12 @@
+<?php
+
+/**
+ * @file
+ * User Warn module file.
+ *
+ * This module allows site  administrators to send a stock warning e-mail to a
+ * specified user or users through the admin interface. Administrators can
+ * configure the default e-mail including token replacement.
+ */
+
+
