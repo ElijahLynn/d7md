@@ -74,6 +74,9 @@ function user_warn_form($form, &$form_state) {
     '#required' => TRUE,
     '#descriptions' => t('The text of the e-mail which will be sent to users.'),
   );
+  $form['token_help'] = array(
+    '#theme' => 'token_tree_link',
+  );
 
   // Checkbox to indicate if the admin should be sent a BCC on e-mails.
   $form['user_warn_bcc'] = array(
