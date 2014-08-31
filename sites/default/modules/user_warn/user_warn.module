@@ -9,4 +9,18 @@
  * configure the default e-mail including token replacement.
  */
 
+/**
+ * Implements hook_menu().
+ */
+function user_warn_menu() {
+  $items = array();
 
+  $items['admin/config/people/user_warn'] = array(
+    'title' => 'User Warn',
+    'description' => 'Configuration for the User Warn module.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('user_warn_form'),
+    'access arguments' => array('administer users'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+}
