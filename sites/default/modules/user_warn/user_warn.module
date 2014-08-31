@@ -24,7 +24,7 @@ function user_warn_menu() {
     'type' => MENU_NORMAL_ITEM,
   );
 
-  $items['user/%/warn'] = array(
+  $items['user/%user/warn'] = array(
     'title' => 'Warn',
     'description' => 'Send e-mail to a user about improper site behaviour.',
     'page callback' => 'drupal_get_form',
@@ -34,4 +34,44 @@ function user_warn_menu() {
   );
 
   return $items;
+}
+
+/**
+ * Form constructor for the User Warn form.
+ */
+function user_warn_form($form, &$form_state) {
+  // Text field for the e-mail subject.
+  $form['user_warn_e-mail_subject'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Warning e-mail subject'),
+    '#description' => t('The subject of the e-mail which will be sent to users.'),
+    '#size' => 40,
+    '#maxlength' => 120,
+    '#required' => TRUE,
+  );
+
+  // Textarea for the body of the e-mail.
+  $form['user_warn_e-mail_text'] = array(
+    '#type' => 'textarea',
+    '#rows' => 10,
+    '#columns' => 40,
+    '#title' => t('Warning e-mail text'),
+    '#required' => TRUE,
+    '#descriptions' => t('The text of the e-mail which will be sent to users.'),
+  );
+
+  // Checkbox to indicate if the admin should be sent a BCC on e-mails.
+  $form['user_warn_bcc'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('BCC admin on all e-mails'),
+    '#description' => t('Indicates whether the admin user (as set in site configuration) should be sent on all warning e-mails.'),
+  );
+
+  // Submit button.
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Save settings'),
+  );
+
+  return $form;
 }
