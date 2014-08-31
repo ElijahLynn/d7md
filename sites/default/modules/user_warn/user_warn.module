@@ -32,4 +32,6 @@ function user_warn_menu() {
     'access arguments' => array('administer users'),
     'type' => MENU_LOCAL_TASK,
   );
+
+  return $items;
 }
