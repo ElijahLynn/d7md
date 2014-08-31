@@ -38,6 +38,8 @@ function user_warn_menu() {
 
 /**
  * Form constructor for the User Warn form.
+ *
+ * @ingroup forms
  */
 function user_warn_form($form, &$form_state) {
   // Text field for the e-mail subject.
