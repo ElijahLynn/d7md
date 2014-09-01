@@ -37,5 +37,3 @@ function artwork_add($type) {
 
   return drupal_get_form($type . '_artwork_form', $artwork);
 }
-
-

@@ -3,6 +3,8 @@ description = Artwork entity description
 core = 7.x
 package = Drupal 7 Development
 
+dependencies[] = field_ui
+
 files[] = artwork.controller.inc
 files[] = artwork.pages.inc
-dependencies[] = field_ui
+files[] = artwork.admin.inc
