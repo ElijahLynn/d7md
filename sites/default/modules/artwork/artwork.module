@@ -197,3 +197,77 @@ function artwork_load($aid = NULL, $vid = NULL, $reset = FALSE) {
 function artwork_load_multiple($aids = array(), $conditions = array(), $reset = FALSE) {
   return entity_load('artwork', $aids, $conditions, $reset);
 }
+
+/**
+ * Implements hook_forms().
+ *
+ * All artwork forms share the same handler.
+ *
+ * @see node_forms()
+ */
+function artwork_forms() {
+  $forms = array();
+  if ($types = artwork_types()) {
+    foreach (array_keys($types) as $type) {
+      $forms[$type . '_artwork_form']['callback'] = 'artwork_form';
+    }
+  }
+
+  return $forms;
+}
+
+/**
+ * Form builder for our Artwork bundles.
+ *
+ * @see artwork_forms()
+ */
+function artwork_form($form, &$form_state, $artwork) {
+  // Set the ID to identify this as an artwork edit form.
+  $form['#id'] = 'artwork-form';
+
+  // Save the artwork for later, in case we need it.
+  $form['#artwork'] = $artwork;
+  $form_state['artwork'] = $artwork;
+
+  // Common fields. We don't have many.
+  $form['title'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Title'),
+    '#default_value' => $artwork->title,
+    '#weight' => -5,
+    '#required' => TRUE,
+  );
+
+  $form['revision'] = array(
+    '#access' => user_access('administer artworks'),
+    '#type' => 'checkbox',
+    '#title' => t('Create new revision'),
+    '#default_value' => 0,
+  );
+
+  // Add the buttons.
+  $form['buttons'] = array();
+  $form['buttons']['#weight'] = 100;
+  $form['buttons']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Save'),
+    '#weight' => 5,
+    '#submit' => array('artwork_form_submit'),
+  );
+
+  if (!empty($artwork->aid)) {
+    $form['buttons']['delete'] = array(
+      '#access' => user_access('delete artworks'),
+      '#type' => 'submit',
+      '#value' => t('Delete'),
+      '#weight' => 15,
+      '#submit' => array('artwork_form_delete_submit'),
+    );
+  }
+
+  $form['#validate'][] = 'artwork_form_validate';
+
+  field_attach_form('artwork', $artwork, $form, $form_state);
+
+  return $form;
+}
