@@ -26,6 +26,7 @@ function artwork_entity_info() {
       'bundle' => 'type',
     ),
     'static cache' => TRUE,
+    // Initialize for use in the foreach() below.
     'bundles' => array(),
     'view modes' => array(
       'full' => array(
@@ -65,4 +66,29 @@ function artwork_uri($artwork) {
   return array(
     'path' => 'artwork/' . $artwork->aid,
   );
+}
+
+/**
+ * Get the Artwork bundle types.
+ *
+ * return object
+ *   A list of all the Artwork bundle types.
+ */
+function artwork_types() {
+  $types = &drupal_static(__FUNCTION__);
+
+  if (empty($types)) {
+    $types['painting'] = (object) array(
+      'type' => 'painting',
+      'name' => t('Painting'),
+      'description' => t('A picture made with paint.'),
+    );
+    $types['sculpture'] = (object) array(
+      'type' => 'sculpture',
+      'name' => t('Sculpture'),
+      'description' => t('A carving made out of wood or stone'),
+    );
+  }
+
+  return $types;
 }
