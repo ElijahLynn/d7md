@@ -39,6 +39,7 @@ function artwork_entity_info() {
     ),
   );
 
+  // Primarily here to support the Field API.
   foreach (artwork_types() as $type => $info) {
     $return['artwork']['bundles'][$type] = array(
       'label' => $info->name,
@@ -52,4 +53,16 @@ function artwork_entity_info() {
   }
 
   return $return;
+}
+
+/**
+ * Implements callback_entity_info_uri().
+ *
+ * @see artwork_entity_info()
+ * @see entity_uri()
+ */
+function artwork_uri($artwork) {
+  return array(
+    'path' => 'artwork/' . $artwork->aid,
+  );
 }
