@@ -92,3 +92,15 @@ function artwork_types() {
 
   return $types;
 }
+
+/**
+ * Load the Artwork entity.
+ *
+ * @see artwork_entity_info()
+ */
+function artwork_type_load($type) {
+  $types = artwork_types();
+  $type = str_replace('-', '_', $type);
+
+  return isset($types[$type]) ? $types[$type] : FALSE;
+}
