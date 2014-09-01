@@ -273,11 +273,38 @@ function artwork_form($form, &$form_state, $artwork) {
 }
 
 /**
- * Validation handler for artwork_form().
+ * Form validation handler for artwork_form().
  */
 function artwork_form_validate($form, &$form_state) {
   $artwork = $form_state['artwork'];
 
   // Field validation.
   field_attach_form_validate('artwork', $artwork, $form, $form_state);
+}
+
+/**
+ * Form submission handler for artwork_form().
+ */
+function artwork_form_submit($form, &$form_state) {
+  global $user;
+
+  $artwork = &$form_state['artwork'];
+
+  // Set the artwork's UID if it's being created at this time.
+  if (empty($artwork->uid)) {
+    $artwork->uid = $user->uid;
+  }
+
+  $artwork->title = $form_state['values']['title'];
+  $artwork->revision = $form_state['values']['revision'];
+
+  // Notify field widgets.
+  field_attach_submit('artwork', $artwork, $form, $form_state);
+
+  artwork_save($artwork);
+
+  // Notify the user.
+  drupal_set_message(t('Artwork saved.'));
+
+  $form_state['redirect'] = 'artwork/' . $artwork->aid;
 }
