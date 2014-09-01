@@ -71,6 +71,15 @@ function artwork_menu() {
     'type' => MENU_LOCAL_TASK,
     'context' => MENU_CONTEXT_PAGE | MENU_CONTEXT_INLINE,
   );
+  $items['artwork/%artwork/delete'] = array(
+    'title' => 'Delete',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('artwork_delete_confirm', 1),
+    'access arguments' => array('delete artworks'),
+    'weight' => 1,
+    'type' => MENU_LOCAL_TASK,
+    'context' => MENU_CONTEXT_INLINE,
+  );
 
   return $items;
 }
@@ -383,4 +392,58 @@ function artwork_page_edit($artwork) {
     PASS_THROUGH);
 
   return drupal_get_form($artwork->type . '_artwork_form', $artwork);
+}
+
+/**
+ * Form submission handler for delete submit element at artwork/%artwork/delete.
+ */
+function artwork_form_delete_submit($form, &$form_state) {
+  $destination = array();
+
+  if (isset($_GET['destination'])) {
+    $destination = drupal_get_destination();
+    unset($_GET['destination']);
+  }
+  $artwork = $form['#artwork'];
+  $form_state['redirect'] = array('artwork/' . $artwork->aid . '/delete', array('query' => $destination));
+}
+
+/**
+ * Delete confirmation form.
+ */
+function artwork_delete_confirm($form, &$form_state, $artwork) {
+  $form['#artwork'] = $artwork;
+  // Always provide entity ID in the same form key as in the entity edit form.
+  $form['aid'] = array(
+    '#type' => 'value',
+    '#value' => $artwork->aid,
+  );
+
+  return confirm_form(
+    $form,
+    t('Are you sure you want to delete %title?', array('%title' => $artwork->title)),
+    'artwork/' . $artwork->aid,
+    t('This action cannot be undone.'),
+    t('Delete'),
+    t('Cancel')
+  );
+}
+
+/**
+ * Form submission handler for artwork_delete_confirm().
+ */
+function artwork_delete_confirm_submit($form, &$form_state) {
+  if ($form_state['values']['confirm']) {
+    $artwork = artwork_load($form_state['values']['aid']);
+    artwork_delete($form_state['values']['aid']);
+    watchdog('artwork', '@type: deleted %title.', array('@type' => $artwork->type, '%title' => $artwork->title));
+
+    $types = artwork_types();
+    drupal_set_message(t('@type %title has been deleted.', array(
+      '@type' => $types[$artwork->type]->name,
+      '%title' => $artwork->title,
+    )));
+
+    $form_state['redirect'] = '<front>';
+  }
 }
