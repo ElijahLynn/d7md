@@ -6,6 +6,75 @@
  */
 
 /**
+ * Implements hook_menu().
+ */
+function artwork_menu() {
+  $items['admin/structure/artworks'] = array(
+    'title' => 'Manage artworks',
+    'description' => 'Manage artworks.',
+    'page callback' => 'artwork_overview_types',
+    'access arguments' => array('administer artworks'),
+  );
+  $items['admin/structure/artworks/manage/%artwork_type'] = array(
+    'title' => 'View artwork type',
+    'title callback' => 'artwork_type_page_title',
+    'title arguments' => array(4),
+    'page callback' => 'artwork_information',
+    'page arguments' => array(4),
+    'access arguments' => array('administer artworks'),
+  );
+  $items['admin/structure/artworks/manage/%artwork_type/view'] = array(
+    'title' => 'View',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+  );
+  $items['artwork/add'] = array(
+    'title' => 'Add new artwork.',
+    'page callback' => 'artwork_add_page',
+    'access arguments' => array('create artworks'),
+    'weight' => 1,
+    'menu_name' => 'management',
+    'file' => 'artwork.pages.inc',
+  );
+  foreach (artwork_types() as $type) {
+    $type_url_str = str_replace('_', '-', $type->type);
+    $items['artwork/add/' . $type_url_str] = array(
+      'title' => $type->name,
+      'title callback' => 'check_plain',
+      'page callback' => 'artwork_add',
+      'page arguments' => array(2),
+      'access arguments' => array('create artworks'),
+      'description' => $type->description,
+      'file' => 'artwork.pages.inc',
+    );
+  }
+
+  return $items;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function artwork_permission() {
+  return array(
+    'administer artworks' => array(
+      'title' => t('Administer artworks'),
+    ),
+    'create artworks' => array(
+      'title' => t('Create artworks'),
+    ),
+    'update artworks' => array(
+      'title' => t('Update artworks'),
+    ),
+    'view artworks' => array(
+      'title' => t('View artworks'),
+    ),
+    'delete artworks' => array(
+      'title' => t('Delete artworks'),
+    ),
+  );
+}
+
+/**
  * Implements hook_entity_info().
  */
 function artwork_entity_info() {
@@ -41,6 +110,7 @@ function artwork_entity_info() {
   );
 
   // Primarily here to support the Field API.
+  // Also see artwork_menu().
   foreach (artwork_types() as $type => $info) {
     $return['artwork']['bundles'][$type] = array(
       'label' => $info->name,
@@ -124,4 +194,37 @@ function artwork_load($aid = NULL, $vid = NULL, $reset = FALSE) {
  */
 function artwork_load_multiple($aids = array(), $conditions = array(), $reset = FALSE) {
   return entity_load('artwork', $aids, $conditions, $reset);
+}
+
+/**
+ * Page callback for admin/structure/artworks.
+ *
+ * @see artwork_menu()
+ */
+function artwork_overview_types() {
+  foreach (artwork_types() as $type => $info) {
+    $type_url_str = str_replace('_', '-', $type);
+    $label = t('View @type', array('@type' => $info->name));
+    $items[] = l($label, 'admin/structure/artworks/manage/' . $type_url_str);
+  }
+
+  return theme('item_list', array('items' => $items));
+}
+
+/**
+ * Title callback for admin/structure/artworks/manage/%artwork_type.
+ *
+ * @see artwork_menu()
+ */
+function artwork_type_page_title($type) {
+  return t('Manage @type', array('@type' => $type->name));
+}
+
+/**
+ * Page callback for admin/structure/artworks/manage/%artwork_type.
+ *
+ * @see artwork_menu()
+ */
+function artwork_information($artwork_type) {
+  return $artwork_type->name . ': ' . $artwork_type->description;
 }
