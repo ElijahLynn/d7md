@@ -2,3 +2,5 @@ name = Artwork entity
 description = Artwork entity description
 core = 7.x
 package = Drupal 7 Development
+
+files[] artwork.controller.inc
