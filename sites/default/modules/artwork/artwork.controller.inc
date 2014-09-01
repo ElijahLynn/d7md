@@ -36,6 +36,8 @@ class ArtworkController extends DrupalDefaultEntityController {
       // Give modules the opportunity to prepare field data for saving.
       field_attach_presave('artwork', $artwork);
 
+      // If it is old and revision checkbox checked and preexisting revision.
+      //
       if (!$artwork->is_new && !empty($artwork->revision) && $artwork->vid) {
         $artwork->old_vid = $artwork->vid;
         unset($artwork->vid);
@@ -69,7 +71,7 @@ class ArtworkController extends DrupalDefaultEntityController {
       // If the revision ID is new or updated, save it to the artwork.
       if ($update_artwork) {
         db_update('artwork')
-          ->field(array('vid' => $artwork->vid))
+          ->fields(array('vid' => $artwork->vid))
           ->condition('aid', $artwork->aid)
           ->execute();
       }
@@ -95,5 +97,22 @@ class ArtworkController extends DrupalDefaultEntityController {
 
       return FALSE;
     }
+  }
+
+  public function saveRevision($artwork, $uid, $update = FALSE) {
+    // Hold on to the artwork's original creator_uid but swap in the
+    // revision's creator_uid for the momentary write.
+    $temp_uid = $artwork->uid;
+    $artwork->uid = $uid;
+
+    if ($update) {
+      drupal_write_record('artwork_revision', $artwork, 'vid');
+    }
+    else {
+      drupal_write_record('artwork_revision', $artwork);
+    }
+
+    // Reset the order's creator_uid to the original value.
+    $artwork->uid = $temp_uid;
   }
 }
