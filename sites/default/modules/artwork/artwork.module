@@ -49,6 +49,19 @@ function artwork_menu() {
       'file' => 'artwork.pages.inc',
     );
   }
+  $items['artwork/%artwork'] = array(
+    'title callback' => 'artwork_page_title',
+    'title arguments' => array(1),
+    'page callback' => 'artwork_page_view',
+    'page arguments' => array(1),
+    'access arguments' => array('view artworks'),
+    'type' => MENU_CALLBACK,
+  );
+  $items['artwork/%artwork/view'] = array(
+    'title' => 'View',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => -10,
+  );
 
   return $items;
 }
@@ -314,4 +327,37 @@ function artwork_form_submit($form, &$form_state) {
  */
 function artwork_save($artwork) {
   return entity_get_controller('artwork')->save($artwork);
+}
+
+/**
+ * Title callback for artwork/%artwork.
+ *
+ * @see artwork_menu()
+ */
+function artwork_page_title($artwork) {
+  return $artwork->title;
+}
+
+/**
+ * Page callback for artwork/%artwork.
+ *
+ * @see artwork_menu()
+ */
+function artwork_page_view($artwork, $view_mode = 'full') {
+  // Remove previously built content, if exists.
+  $artwork->content = array();
+
+  if ($view_mode === 'teaser') {
+    $artwork->content['title'] = array(
+      '#markup' => filter_xss($artwork->title),
+      '#weight' => -5,
+    );
+  }
+
+  // Build fields content.
+  field_attach_prepare_view('artwork', array($artwork->aid => $artwork), $view_mode);
+  entity_prepare_view('artwork', array($artwork->aid => $artwork));
+  $artwork->content += field_attach_view('artwork', $artwork, $view_mode);
+
+  return $artwork->content;
 }
