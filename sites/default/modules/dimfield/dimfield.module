@@ -25,6 +25,11 @@ function dimfield_info() {
   );
 }
 
+/**
+ * Implements hook_field_is_empty().
+ *
+ * Pseudo-hook.
+ */
 function dimfield_field_is_empty($item, $field) {
   if ($field['type'] === 'dimensions') {
     if (
@@ -38,6 +43,11 @@ function dimfield_field_is_empty($item, $field) {
   return FALSE;
 }
 
+/**
+ * Implements hook_field_settings_form().
+ *
+ * Pseudo-hook.
+ */
 function dimfield_field_settings_form($field, $instance, $has_data) {
   if ($field['type'] === 'dimensions') {
     $settings = $field['settings'];
@@ -54,5 +64,41 @@ function dimfield_field_settings_form($field, $instance, $has_data) {
     );
 
     return $form;
+  }
+}
+
+/**
+ * Implements hook_field_validate().
+ *
+ * Pseudo-hook.
+ */
+function dimfield_field_validate($obj_type, $object, $field, $instance, $langcode, &$items, &$errors) {
+  if ($field['type'] === 'dimensions') {
+    $columns = array(
+      'height' => 'max_height',
+      'width' => 'max_width',
+    );
+
+    if ($field['settings']['num_dimensions'] === 3) {
+      $columns['depth'] = 'max_depth';
+    }
+
+    foreach ($items as $delta => $item) {
+      foreach ($colums as $column => $max_key) {
+        if (
+            $instance['settings'][$max_key] &&
+            !empty($item[$column]) &&
+            $item[$column] > $instance['settings'][$max_key]) {
+          $errors[$field['field_name']][$delta][] = array(
+            'error' => 'dimfield_' . $max_key,
+            'message' => t('%name: The %column may not be larger than %max.', array(
+              '%name' => $instance['label'],
+              '%column' => $column,
+              '%max' => $instance['settings'][$max_key],
+            )),
+          );
+        }
+      }
+    }
   }
 }
