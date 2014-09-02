@@ -24,3 +24,16 @@ function dimfield_info() {
     ),
   );
 }
+
+function dimfield_field_is_empty($item, $field) {
+  if ($field['type'] === 'dimensions') {
+    if (
+      empty($item['height']) &&
+      empty($item['width']) &&
+      ($field['settings']['num_dimensions'] === 2 || empty($item['depth']))
+      ) {
+      return TRUE;
+    }
+  }
+  return FALSE;
+}
