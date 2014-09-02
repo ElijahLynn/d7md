@@ -1,0 +1,26 @@
+<?php
+
+/**
+ * @file
+ * Multi-dimensional field, includes width, height and depth.
+ */
+
+/**
+ * Implements hook_field_info().
+ */
+function dimfield_info() {
+  return array(
+    'dimensions' => array(
+      'label' => t('Dimensions'),
+      'description' => t('This field stores a height and width, and depth.'),
+      'settings' => array('num_dimensions' => 2),
+      'instance_settings' => array(
+        'max_height' => 0,
+        'max_width' => 0,
+        'max_depth' => 0,
+      ),
+      'default_widget' => 'dimfield_combined',
+      'default_formatter' => 'dimfield_default',
+    ),
+  );
+}

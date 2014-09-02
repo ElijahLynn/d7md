@@ -1,0 +1,4 @@
+name = Dimension Field
+description = Creates a field that offers width, height and depth dimensions.
+core = 7.x
+package = Drupal 7 Developmenet
