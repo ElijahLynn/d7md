@@ -35,7 +35,6 @@ function dimfield_field_schema($field) {
       'length' => 10,
       'not null' => FALSE,
     );
+    return $schema;
   }
-
-  return $schema;
 }
