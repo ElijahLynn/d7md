@@ -7,6 +7,8 @@
 
 /**
  * Implements hook_field_schema().
+ *
+ * This doesn't actually get run on install but on field creation.
  */
 function dimfield_field_schema($field) {
   if ($field['type'] === 'dimensions') {
