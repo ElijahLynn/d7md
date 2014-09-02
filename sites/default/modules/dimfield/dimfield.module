@@ -84,7 +84,7 @@ function dimfield_field_validate($obj_type, $object, $field, $instance, $langcod
     }
 
     foreach ($items as $delta => $item) {
-      foreach ($colums as $column => $max_key) {
+      foreach ($columns as $column => $max_key) {
         if (
             $instance['settings'][$max_key] &&
             !empty($item[$column]) &&
