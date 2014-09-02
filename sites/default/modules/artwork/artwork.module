@@ -29,6 +29,7 @@ function artwork_menu() {
     'title' => 'View',
     'type' => MENU_DEFAULT_LOCAL_TASK,
   );
+
   $items['artwork/add'] = array(
     'title' => 'Add new artwork',
     'page callback' => 'artwork_add_page',
@@ -222,8 +223,8 @@ function artwork_load($aid = NULL, $vid = NULL, $reset = FALSE) {
 /**
  * Wrapper around entity_load().
  *
- * entity_load() actually will create a new instance of ArtworkController and call the
- * inherited load() method on it.
+ * entity_load() actually will create a new instance of ArtworkController and
+ * call the inherited load() method on it.
  */
 function artwork_load_multiple($aids = array(), $conditions = array(), $reset = FALSE) {
   return entity_load('artwork', $aids, $conditions, $reset);
@@ -446,4 +447,18 @@ function artwork_delete_confirm_submit($form, &$form_state) {
 
     $form_state['redirect'] = '<front>';
   }
+}
+
+/**
+ * Deleter.
+ */
+function artwork_delete($aid) {
+  return artwork_delete_multiple(array($aid));
+}
+
+/**
+ * Deleter multiple.
+ */
+function artwork_delete_multiple($aids) {
+  return entity_get_controller('artwork')->delete($aids);
 }
